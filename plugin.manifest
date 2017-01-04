@@ -1,0 +1,6 @@
+pluginclassname=BuddyPlugin
+pluginname=BuddyPlugin
+origin=gloeggl@elan-ev.de
+version=1.0
+studipMinVersion=2.2
+studipMaxVersion=3.5
