@@ -45,7 +45,6 @@ class BuddyPlugin extends StudipPlugin implements SystemPlugin
                     if ($contact2) {
                         $contact2->delete();
                     }
-                    PageLayout::postMessage(MessageBox::success(sprintf(_('entry 1 gelöscht %s'), $this->joint_courses($member['user_id'], $user_id))));
                 }
             }
         }
