@@ -36,33 +36,33 @@ class BuddyPlugin extends StudipPlugin implements SystemPlugin
         $members = CourseMember::findByCourse($seminar_id);
         foreach ($members as $member){
             if ($member['user_id'] != $user_id){
-                if ($this->joint_courses($member['user_id'], $user_id) < 2){
+                //wenn die Nutzer nicht in weitere Veranstatungen gemeinsam eingetragen sind, lösche Adressbucheinträge
+                if ($this->joint_courses($member['user_id'], $user_id) < 1){
                     $contact = Contact::find(array($user_id, $member['user_id']));
+                    PageLayout::postMessage(MessageBox::success(sprintf(_('ids: %s,  %s'), $user_id, $member['user_id'])));
                     if ($contact) {
-                        $contact->delete();
+                        $result = $contact->delete();
                     }
                     $contact2 = Contact::find(array($member['user_id'], $user_id));
                     if ($contact2) {
-                        $contact2->delete();
+                        $result = $contact2->delete();
                     }
                 }
-            }
+            } 
         }
     }
     
     private function joint_courses($usera, $userb){
-        global $perm;
         $joint_courses = 0;
         $user_a = new User($usera);
         $coursesa = $user_a->course_memberships;
-        $user_b = new User($userb);
-        $coursesb = $user_b->course_memberships;
         foreach ($coursesa as $course){
-            if ($perm->have_studip_perm('user', $course->seminar_id)){
+            PageLayout::postMessage(MessageBox::success(sprintf(_('user: %s, seminar %s'),$userb, $course->seminar_id)));
+            if (CourseMember::findBySQL("user_id = '" . $userb . "' AND Seminar_id = '" . $course->seminar_id . "'")){
                 $joint_courses++;
             }
-        }
-           
+        } 
+        PageLayout::postMessage(MessageBox::success($joint_courses));
         return $joint_courses;
     }
 }
