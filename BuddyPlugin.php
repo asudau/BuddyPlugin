@@ -39,7 +39,6 @@ class BuddyPlugin extends StudipPlugin implements SystemPlugin
                 //wenn die Nutzer nicht in weitere Veranstatungen gemeinsam eingetragen sind, lösche Adressbucheinträge
                 if ($this->joint_courses($member['user_id'], $user_id) < 1){
                     $contact = Contact::find(array($user_id, $member['user_id']));
-                    PageLayout::postMessage(MessageBox::success(sprintf(_('ids: %s,  %s'), $user_id, $member['user_id'])));
                     if ($contact) {
                         $result = $contact->delete();
                     }
@@ -57,12 +56,10 @@ class BuddyPlugin extends StudipPlugin implements SystemPlugin
         $user_a = new User($usera);
         $coursesa = $user_a->course_memberships;
         foreach ($coursesa as $course){
-            PageLayout::postMessage(MessageBox::success(sprintf(_('user: %s, seminar %s'),$userb, $course->seminar_id)));
             if (CourseMember::findBySQL("user_id = '" . $userb . "' AND Seminar_id = '" . $course->seminar_id . "'")){
                 $joint_courses++;
             }
         } 
-        PageLayout::postMessage(MessageBox::success($joint_courses));
         return $joint_courses;
     }
 }
